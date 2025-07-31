@@ -292,19 +292,36 @@ async def download_and_decrypt_video(url, cmd, name, key):
             print(f"Failed to decrypt {video_path}.")  
             return None  
 
-async def send_vid(bot: Client, m: Message, cc, filename, thumb, name, prog, channel_id):
+async def send_vid(bot: Client, m: Message, cc, filename, thumb, name, prog, channel_id, topic_id=None):
     subprocess.run(f'ffmpeg -i "{filename}" -ss 00:00:10 -vframes 1 "{filename}.jpg"', shell=True)
-    await prog.delete (True)
-    reply1 = await bot.send_message(channel_id, f"**📩 Uploading Video 📩:-**\n<blockquote>**{name}**</blockquote>")
+    await prog.delete(True)
+    reply1 = await bot.send_message(
+        chat_id=channel_id,
+        text=f"**📩 Uploading Video 📩:-**\n<blockquote>**{name}**</blockquote>",
+        message_thread_id=topic_id
+    )
     reply = await m.reply_text(f"**Generate Thumbnail:**\n<blockquote>**{name}**</blockquote>")
     try:
         if thumb == "/d":
             thumbnail = f"{filename}.jpg"
         else:
             thumbnail = thumb
-            
+        await bot.send_video(
+            chat_id=channel_id,
+            video=filename,
+            caption=cc,
+            thumb=thumbnail,
+            message_thread_id=topic_id
+        )
+        await reply1.delete(True)
+        await reply.delete(True)
+        os.remove(filename)
+        if thumb != "/d" and os.path.exists(thumb):
+            os.remove(thumb)
+        if os.path.exists(f"{filename}.jpg"):
+            os.remove(f"{filename}.jpg")
     except Exception as e:
-        await m.reply_text(str(e))
+        await m.reply_text(f"Error sending video: {str(e)}")
       
     dur = int(duration(filename))
     start_time = time.time()
