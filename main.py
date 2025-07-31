@@ -813,7 +813,11 @@ async def y2t_button(client, callback_query):
 @bot.on_message(filters.command(["id"]))
 async def id_command(client, message: Message):
     chat_id = message.chat.id
-    await message.reply_text(f"<blockquote>The ID of this chat id is:</blockquote>\n`{chat_id}`")
+    topic_id = message.message_thread_id if message.is_topic_message else None
+    text = f"<blockquote>The ID of this chat is:</blockquote>\n`{chat_id}`"
+    if topic_id:
+        text += f"\n<blockquote>The Topic ID is:</blockquote>\n`{topic_id}`"
+    await message.reply_text(text)
 
 @bot.on_message(filters.private & filters.command(["info"]))
 async def info(bot: Client, update: Message):
