@@ -1071,19 +1071,19 @@ async def txt_handler(bot: Client, m: Message):
 
             elif "https://cpvod.testbook.com/" in url:
                 url = url.replace("https://cpvod.testbook.com/","https://media-cdn.classplusapp.com/drm/")
-                url = f"https://cpapi-rjbs.onrender.com/extract_keys?url={url}@bots_updatee"
+                url = f"https://cpapi-rjbs-1l0p.onrender.com/extract_keys?url=%7Burl%7D@bots_updatee&user_id=%7Buser_id%7D"
                 mpd, keys = helper.get_mps_and_keys(url)
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
             elif "classplusapp.com/drm/" in url:
-                url = f"https://cpapi-rjbs.onrender.com/extract_keys?url={url}@bots_updatee"
+                url = f"https://cpapi-rjbs-1l0p.onrender.com/extract_keys?url=%7Burl%7D@bots_updatee&user_id=%7Buser_id%7D"
                 mpd, keys = helper.get_mps_and_keys(url)
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
             elif "classplusapp" in url:
-                signed_api = f"https://cpapi-rjbs.onrender.com/extract_keys?url={url}@bots_updatee"
+                signed_api = f"https://cpapi-rjbs-1l0p.onrender.com/extract_keys?url=%7Burl%7D@bots_updatee&user_id=%7Buser_id%7D"
                 response = requests.get(signed_api, timeout=10)
                 #url = response.text.strip()
                 url = response.json()['url']  
