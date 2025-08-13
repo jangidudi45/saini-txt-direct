@@ -13,6 +13,12 @@ import urllib.parse
 import yt_dlp
 import tgcrypto
 import cloudscraper
+
+def sanitize_filename(name: str) -> str:
+    name = name.strip()
+    name = name.replace("»", "-")
+    return re.sub(r'[^\w\s\.-]', '', name)
+
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 from base64 import b64encode, b64decode
